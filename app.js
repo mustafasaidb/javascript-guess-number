@@ -7,7 +7,7 @@ const scoreResetBtn = document.querySelector(".btn-score-reset");
 let score = 10;
 scoreSpan.innerHTML = `Score: ${score}`;
 
-const random = Math.floor(Math.random() * 10);
+const random = Math.floor(Math.random() * 20);
 console.log(random);
 
 let highScore = localStorage.getItem("score");
@@ -23,11 +23,19 @@ btn.addEventListener("click", () => {
   } else if (input.value == random) {
     answerSpan.innerHTML = random;
     scoreSpan.innerHTML = "Tebrikler. Kazandınız.";
-    localStorage.setItem("score", score);
+    if (score > highScore) {
+      localStorage.setItem("score", score);
+    }
     highScoreSpan.innerHTML = `High Score: ${localStorage.getItem("score")}`;
-  } else {
+  } else if (input.value !== random) {
     score = score - 1;
     scoreSpan.innerHTML = `Score: ${score}`;
+  }
+
+  if (input.value < random) {
+    answerSpan.innerHTML = `<i class="fa-solid fa-arrow-up fa-fade"></i>`;
+  } else if (input.value > random) {
+    answerSpan.innerHTML = `<i class="fa-solid fa-arrow-down fa-fade"></i>`;
   }
 
   if (score <= 0) {
