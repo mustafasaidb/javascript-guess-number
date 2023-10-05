@@ -1,29 +1,40 @@
-var score = 0;
-var chances = 3;
-var randomNumber = Math.floor(Math.random() * 10) + 1;
-var highScore = localStorage.getItem("highScore") || 0;
+const answerSpan = document.querySelector(".answer");
+const input = document.querySelector(".number");
+const btn = document.querySelector(".btn");
+const scoreSpan = document.querySelector(".score");
+const highScoreSpan = document.querySelector(".high-score");
+const scoreResetBtn = document.querySelector(".btn-score-reset");
+let score = 10;
+scoreSpan.innerHTML = `Score: ${score}`;
 
-function guessNumber() {
-  var guess = document.getElementById("guess").value;
+const random = Math.floor(Math.random() * 10);
+console.log(random);
 
-  if (guess == randomNumber) {
-    score += 10;
-    document.getElementById("result").innerHTML = "Congratulations! You guessed the correct number. Your score is: " + score;
-    randomNumber = Math.floor(Math.random() * 10) + 1;
-  } else {
-    score -= 5;
-    chances--;
-    document.getElementById("result").innerHTML = "Sorry, wrong guess. Chances left: " + chances + " Score: " + score;
-  }
+let highScore = localStorage.getItem("score");
+highScoreSpan.innerHTML = `High Score: ${highScore}`;
 
-  if (score > highScore) {
-    highScore = score;
-    localStorage.setItem("highScore", highScore);
-  }
-
-  if (chances == 0) {
-    document.getElementById("result").innerHTML = "Game over. Your total score is: " + score + "<br>Your high score is: " + highScore;
-    document.getElementById("guess").disabled = true;
-    document.getElementsByTagName("button")[0].disabled = true;
-  }
+if (highScore == null) {
+  highScoreSpan.innerHTML = `High Score:`;
 }
+
+btn.addEventListener("click", () => {
+  if (input.value == "") {
+    scoreSpan.innerHTML = "Lütfen bir sayı giriniz.";
+  } else if (input.value == random) {
+    answerSpan.innerHTML = random;
+    scoreSpan.innerHTML = "Tebrikler. Kazandınız.";
+    localStorage.setItem("score", score);
+    highScoreSpan.innerHTML = `High Score: ${localStorage.getItem("score")}`;
+  } else {
+    score = score - 1;
+    scoreSpan.innerHTML = `Score: ${score}`;
+  }
+
+  if (score <= 0) {
+    scoreSpan.innerHTML = "Kaybettiniz. Hakkınız bitti.";
+  }
+});
+
+scoreResetBtn.addEventListener("click", () => {
+  localStorage.removeItem("score");
+});
